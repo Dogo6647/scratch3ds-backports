@@ -1,0 +1,36 @@
+#pragma once
+#include "../scratch/image.hpp"
+#include <3ds.h>
+#include <citro2d.h>
+#include <citro3d.h>
+#include <string>
+#include <unordered_map>
+
+struct ImageData {
+    C2D_Image image;
+    u16 freeTimer = 240;
+};
+
+struct imageRGBA {
+    std::string name;     // "image"
+    std::string fullName; // "image.png"
+    int width;
+    int height;
+    bool isSVG = false;
+
+    //  same as width/height but as powers of 2 for 3DS
+    int textureWidth;
+    int textureHeight;
+
+    size_t textureMemSize;
+    unsigned char *data;
+};
+
+extern std::vector<imageRGBA> imageRGBAS;
+
+bool get_C2D_Image(imageRGBA rgba);
+bool queueC2DImage(imageRGBA &rgba);
+void freeRGBA(const std::string &imageName);
+unsigned char *SVGToRGBA(const void *svg_data, size_t svg_size, int &width, int &height);
+
+extern std::unordered_map<std::string, ImageData> imageC2Ds;
